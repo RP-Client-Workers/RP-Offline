@@ -13,9 +13,10 @@ extra_series_list = []
 
 class Character:
 
-    def __init__(self, name):
-        self.name = name
-        self.path = "characters/{0}/".format(self.name)
+    def __init__(self, names):
+        self.names = names
+        self.persistentinfo = None
+        self.path = "characters/{0}/".format(self.names)
         self.display_name = None
         self.series = None
         self.extra_series = []
@@ -33,9 +34,9 @@ class Character:
         self.spoiler_sprites = {}
         self.cg_sprites = {}
         try:
-            self.config = ConfigParser(self.name)
+            self.config = ConfigParser(self.names)
         except ValueError:
-            self.config = ConfigParser.get_configparser(self.name)
+            self.config = ConfigParser.get_configparser(self.names)
         try:
             self.read_config()
         except (KeyError, AttributeError):
@@ -45,7 +46,7 @@ class Character:
         global main_series_list
         self.config.read(self.path + "settings.ini")
         char = self.config['character']
-        self.display_name = char['name']
+        self.display_name = char['names']
         con_series = char['series']
         con_series = con_series.split(',')
         con_series = [s.strip() for s in con_series]
@@ -137,7 +138,7 @@ class Character:
             if not self.loaded_icons:
                 self.load_icons()
         except Exception as e:
-            popup = MOPopup("Warning", "Something went wrong with " + self.name + "\n" + str(e), "OK")
+            popup = MOPopup("Warning", "Something went wrong with " + self.names + "\n" + str(e), "OK")
             popup.open()
 
 
@@ -182,4 +183,4 @@ class Character:
         return self.spoiler_sprites
 
 
-characters = {name: Character(name) for name in os.listdir("characters") if os.path.isdir("characters/" + name)}
+characters = {names: Character(names) for names in os.listdir("characters") if os.path.isdir("characters/" + names)}

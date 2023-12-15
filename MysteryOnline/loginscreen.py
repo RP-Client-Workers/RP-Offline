@@ -109,10 +109,6 @@ class LoginScreen(Screen):
             try:
                 user.set_char(characters[str(config.get('other', 'last_character'))])
                 user.get_char().load()
-            except KeyError:
-                red_herring = characters['RedHerring']
-                user.set_char(red_herring)
-                user.get_char().load()
             except configparser.NoSectionError:
                 App.get_running_app().build_config(config)
                 config.write()

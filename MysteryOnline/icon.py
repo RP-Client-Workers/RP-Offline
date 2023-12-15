@@ -96,38 +96,6 @@ class IconsLayout(BoxLayout):
                     self.scheduled_icon = child
                 break
 
-    def load_icons(self, char):
-        icons = char.get_icons()
-        spoiler_icons = char.get_spoiler_icons()
-        config = App.get_running_app().config
-        if len(self.children) > 1:
-            self.remove_widget(self.children[1])
-        for g in self.grids:
-            g.clear_widgets()
-        del self.grids[:]
-        counter = 0
-        g = None
-        for i in sorted(icons.textures.keys()):
-            if counter % 54 == 0:
-                g = GridLayout(cols=6)
-                self.grids.append(g)
-            if config.getdefaultint('other', 'spoiler_mode', 1) and i in spoiler_icons:
-                from MysteryOnline.character import characters
-                red_herring = characters['RedHerring']
-                red_herring.load()
-                spoiler_icon = red_herring.get_icons()['4']
-                g.add_widget(Icon(i, spoiler_icon))
-            else:
-                g.add_widget(Icon(i, icons[i]))
-            counter += 1
-        self.max_pages = len(self.grids)
-        self.loading = True
-        self.current_page = 1
-        self.add_widget(self.grids[0], index=1)
-        self.sprite_picked(self.grids[0].children[-1], None, True)
-        self.sprite_picked(self.grids[0].children[-1], None, False)
-        self.loading = False
-
     def sprite_picked(self, icon, sprite_name=None, current=False):
         if sprite_name is None:
             sprite_name = icon.name

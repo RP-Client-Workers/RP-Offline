@@ -164,7 +164,7 @@ class MysteryOnlineApp(App):
             'graceful_exit': 'True',
             'last_location': 'Hakuryou',
             'last_sublocation': 'Aqua1',
-            'last_character': 'RedHerring',
+            'last_character': '',
             'whitelisted_series': [],
             'fav_characters': [],
             'fav_sfx': [],
@@ -240,7 +240,7 @@ class MysteryOnlineApp(App):
         try:
             self.config.set('other', 'last_location', self.user.get_loc().name)
             self.config.set('other', 'last_sublocation', self.user.get_subloc().name)
-            self.config.set('other', 'last_character', self.user.get_char().name)
+            self.config.set('other', 'last_character', self.user.get_char().names)
         except AttributeError:
             pass
         if self.main_screen:
@@ -351,7 +351,7 @@ class MysteryOnlineApp(App):
         """Sends your current parameters as a nullpost. Useful for sending your parameters to new users."""
         np_message = self.message_factory \
             .build_icon_message(location=self.user.get_loc().name, sublocation=self.user_handler.get_current_subloc_name(),
-                                character=self.user.get_char().name, sprite=self.user.get_current_sprite().name,
+                                character=self.user.get_char().names, sprite=self.user.get_current_sprite().name,
                                 position=self.user.get_pos(), sprite_option=self.user_handler.get_current_sprite_option(),
                                 dance=self.user.get_dance())
         self.user_handler.get_connection_manager().send_msg(np_message)

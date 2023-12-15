@@ -183,7 +183,7 @@ class CurrentUserHandler:
         if self.user.colored:
             col_id = self.user.color_ids.index(self.user.get_color())
         loc = self.user.get_loc().name
-        char = self.user.get_char().name
+        char = self.user.get_char().names
         message_factory = App.get_running_app().get_message_factory()
         sfx_name = App.get_running_app().get_main_screen().get_toolbar().get_sfx_name()
         message = message_factory.build_chat_message(content=msg, location=loc, sublocation=self.chosen_subloc_name,
@@ -199,7 +199,7 @@ class CurrentUserHandler:
 
     def send_icon(self):
         loc = self.user.get_loc().name
-        char = self.user.get_char().name
+        char = self.user.get_char().names
         message_factory = App.get_running_app().get_message_factory()
         message = message_factory.build_icon_message(location=loc, sublocation=self.chosen_subloc_name,
                                                      character=char, sprite=self.chosen_sprite_name,

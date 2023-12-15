@@ -7,7 +7,6 @@ from kivy.uix.screenmanager import Screen
 from kivy.config import ConfigParser
 
 from MysteryOnline.character_select import CharacterSelect
-from MysteryOnline.DownloadableCharactersScreen import DownloadableCharactersScreen
 from MysteryOnline.location import location_manager
 from MysteryOnline.debug_mode import DebugModePopup
 
@@ -44,11 +43,6 @@ class RightClickMenu(ModalView):
 
     def on_debug_menu_clicked(self, *args):
         popup = DebugModePopup()
-        self.dismiss(animation=False)
-        popup.open()
-
-    def on_dlc_clicked(self, *args):
-        popup = DownloadableCharactersScreen()
         self.dismiss(animation=False)
         popup.open()
 
@@ -173,25 +167,13 @@ class MainScreen(Screen):
         App.get_running_app().keyboard_listener.bind_keyboard()
 
     def on_new_char(self, char):
-        try:
             self.msg_input.readonly = False
-            self.icons_layout.load_icons(char)
-            self.set_first_sprite(char)
             user_handler = App.get_running_app().get_user_handler()
             connection_manager = user_handler.get_connection_manager()
             message_factory = App.get_running_app().get_message_factory()
-            message = message_factory.build_character_message(char.name, char.link, char.version)
+            message = message_factory.build_character_message(char.names, char.link, char.version)
             connection_manager.send_msg(message)
-            connection_manager.update_char(self, char.name, self.user.username, char.link, char.version)
-        except AttributeError:
-            red_herring = characters['RedHerring']
-            self.on_new_char(red_herring)
-
-
-    def set_first_sprite(self, char):
-        first_icon = sorted(char.get_icons().textures.keys())[0]
-        first_sprite = char.get_sprite(first_icon)
-        self.sprite_preview.set_sprite(first_sprite)
+            connection_manager.update_char(self, char.names, self.user.username, char.link, char.version)
 
     def refocus_text(self, *args):
         # Refocusing the text input has to be done this way cause Kivy
@@ -222,21 +204,3 @@ class MainScreen(Screen):
 
     def get_toolbar(self):
         return self.toolbar
-
-    def add_character_to_dlc_list(self, char, link, version):
-        try:
-            oldver = characters[char].version
-        except Exception as e:
-            oldver = 0
-
-        if char not in self.character_list_for_dlc and link is not None:
-            try:
-                if char not in characters or float(version) > float(oldver): #because strings
-                    char = char + '#' + link + '#' + version
-                    if char not in self.character_list_for_dlc and link != 'no link':
-                        self.character_list_for_dlc.append(char)
-            except ValueError: #because bad strings.
-                if char not in characters:
-                    char = char+'#'+link+'#'+version
-                    if char not in self.character_list_for_dlc and link != 'no link':
-                        self.character_list_for_dlc.append(char)

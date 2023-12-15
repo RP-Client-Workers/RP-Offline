@@ -898,7 +898,7 @@ class ConnectionManager:
         char = user.get_char()
         if char is not None:
             message_factory = App.get_running_app().get_message_factory()
-            char_msg = message_factory.build_character_message(char.name, char.link, char.version)
+            char_msg = message_factory.build_character_message(char.names, char.link, char.version)
             self.send_msg(char_msg)
             App.get_running_app().send_current_nullpost()
 

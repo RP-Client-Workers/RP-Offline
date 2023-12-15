@@ -298,11 +298,11 @@ class SpriteWindow(Widget):
                 if i != user and i.get_dance():
                     i.set_sprite_option(option)
 
-        if char.name != 'Narrator':
+        if char.names != 'Narrator':
             subloc.remove_o_user(user)
         if display_sub:
             self.sprite_layout.clear_widgets()
-            if char.name == 'Narrator':
+            if char.names == 'Narrator':
                 self.sprite_organizer.add_sprite(self.foreground)
                 self.sprite_organizer.add_sprite(self.overlay)
                 subloc.add_o_user(user)
@@ -328,7 +328,7 @@ class SpriteWindow(Widget):
 
             self.display_sub(subloc)
         else:
-            if char.name == 'Narrator':
+            if char.names == 'Narrator':
                 subloc.add_o_user(user)
             elif pos == 'right':
                 subloc.add_r_user(user)

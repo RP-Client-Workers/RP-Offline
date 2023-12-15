@@ -16,7 +16,7 @@ class CharacterToggle(ToggleButton):
     def __init__(self, char, **kwargs):
         super(CharacterToggle, self).__init__(**kwargs)
         self.char = char
-        self.name = char.name
+        self.names = char.names
         self.background_normal = self.char.avatar
         self.size_hint = (None, None)
         self.size = (60, 60)
@@ -49,7 +49,7 @@ class CharacterSelect(Popup):
         self.save = CharacterSelectSaved(self.main_lay)
         self.value = []
         chars = list(characters.values())
-        self.chars = {x.name.lower(): x for x in chars}
+        self.chars = {x.names.lower(): x for x in chars}
         self.search_space = sorted(self.chars.keys())
         self.search_results = []
         self.search_done = False
@@ -72,7 +72,7 @@ class CharacterSelect(Popup):
 
         grids = {}
         fav = App.get_running_app().get_fav_chars()
-        favorites = list(filter(lambda x: x.name in fav.value, characters.values()))
+        favorites = list(filter(lambda x: x.names in fav.value, characters.values()))
         mod = ceil(len(favorites) / 7)
         fav_button = ToggleButton(text='Favorites', size_hint=(1, None), height=25)
         if fav_button.text in self.value:
@@ -104,7 +104,7 @@ class CharacterSelect(Popup):
 
     def fill_rows_with_chars(self, g, grids):
         chars = list(filter(lambda x: x.series == g, characters.values()))
-        chars = sorted(chars, key=lambda x: x.name)
+        chars = sorted(chars, key=lambda x: x.names)
         fav = App.get_running_app().get_fav_chars()
         config = ConfigParser()
         config.read('mysteryonline.ini')
@@ -124,7 +124,7 @@ class CharacterSelect(Popup):
                 grids[g].add_widget(btn)
 
         for c in chars:
-            if c.name in fav_list and c.name in fav.value and 'Favorites' in self.value:
+            if c.names in fav_list and c.names in fav.value and 'Favorites' in self.value:
                 fav_btn = CharacterToggle(c, group='char', size=[60, 60], text_size=[60, 60], valign='center',
                                           halign='center', markup=True)
                 fav_btn.bind(on_touch_down=self.right_click, state=self.character_chosen)
@@ -142,7 +142,7 @@ class CharacterSelect(Popup):
 
     def character_chosen(self, inst, value):
         if value is 'down':
-            inst.text = '[size=9]'+inst.name+'[/size]'
+            inst.text = '[size=9]'+inst.names+'[/size]'
             self.picked_char = None
             self.picked_char = inst.char
         else:
@@ -193,7 +193,7 @@ class CharacterSelect(Popup):
                         btn = ToggleButton(text=option, state=state, size_hint_y=None, height=50)
                         favorite.buttons.append(btn)
                     for btn in favorite.buttons:
-                        if btn.text is characters[inst.name].name:
+                        if btn.text is characters[inst.names].names:
                             if btn.state == 'normal':
                                 btn.state = 'down'
                             else:

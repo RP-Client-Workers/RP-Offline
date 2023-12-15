@@ -105,8 +105,6 @@ class FavSFXList(MultiChoiceOptions):
 
     def _create_options(self):
         main_scr = App.get_running_app().get_main_screen()
-        toolbar = main_scr.get_toolbar()
-        self.options = sorted(toolbar.sfx_list)
         App.get_running_app().set_fav_sfx(self)
 
 
